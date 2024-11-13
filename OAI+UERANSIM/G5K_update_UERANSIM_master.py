@@ -21,6 +21,7 @@ data = data.replace("yyy", str(amf_ip))
 with open(r'UERANSIM/build/OAI-gnb.yaml', 'w') as file:
     file.write(data)
     file.close()
+print(f"scp {user}:{master}/massi/testoai/OAI-UERANSIM/UERANSIM/build/OAI-gnb.yaml {user}:{workers1}/massi/testoai/OAI+UERANSIM/OAI-gnb.yaml")   
 os.system(f"scp {user}:{master}/massi/testoai/OAI-UERANSIM/UERANSIM/build/OAI-gnb.yaml {user}:{workers1}/massi/testoai/OAI+UERANSIM/OAI-gnb.yaml")
 os.system(f"scp {user}:{master}/massi/testoai/OAI-UERANSIM/UERANSIM/build/OAI-gnb.yaml {user}:{workers2}/massi/testoai/OAI+UERANSIM/OAI-gnb.yaml")
 data = data.replace("xxx", str(ip_adress))
