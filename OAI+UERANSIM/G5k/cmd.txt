@@ -1,0 +1,39 @@
+ssh maitaba@access.grid5000.fr
+oarsub -l nodes=1,walltime=2 -I
+oarsub -C $(oarstat |grep aitaba)
+
+chmod +x setup.sh
+./setup.sh
+
+sudo-g5k kubeadm init --pod-network-cidr=10.244.0.0/16
+
+mkdir -p $HOME/.kube
+sudo-g5k  cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo-g5k  chown $(id -u):$(id -g) $HOME/.kube/config
+
+kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+
+Nombre de machine pas site : https://www.grid5000.fr/w/Status
+
+sudo-g5k kubeadm join 172.16.20.20:6443 --token xn97rt.c8cgon716o7uldzf \
+        --discovery-token-ca-cert-hash sha256:a9694743e476c7c188cc52c953f29a3e22f76560432e9cd8ee78544f36df5fe1
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+
+
+***************** UERANSIM *****************
+sudo-g5k  rm -r UERANSIM/
+
+git clone https://github.com/aligungr/UERANSIM
+
+sudo-g5k apt update
+sudo-g5k  apt install snapd
+sudo-g5k  apt install make
+sudo-g5k  apt install gcc
+sudo-g5k  apt install g++
+yes | sudo-g5k  apt install libsctp-dev lksctp-tools
+sudo-g5k  apt install iproute2
+sudo-g5k  snap install cmake --classic
+
