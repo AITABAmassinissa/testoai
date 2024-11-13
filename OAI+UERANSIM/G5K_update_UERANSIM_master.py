@@ -4,7 +4,10 @@ namespace='oai'
 ip_adress="10.244.0.1"
 nb_pods=8
 network="cni0"
-
+user="maitaba@access.grid5000.fr"
+master="grenoble"
+workers1="lyon"
+workers2="nancy"
 
 print("Core is ok")    
 #get amf ip adress
@@ -18,8 +21,8 @@ data = data.replace("yyy", str(amf_ip))
 with open(r'UERANSIM/build/OAI-gnb.yaml', 'w') as file:
     file.write(data)
     file.close()
-os.system("scp maitaba@access.grid5000.fr:grenoble/massi/oai/OAI-UERANSIM/OAI+UERANSIM/UERANSIM/build/OAI-gnb.yaml maitaba@access.grid5000.fr:lyon/massi/oai/OAI-gnb.yaml")
-os.system("scp maitaba@access.grid5000.fr:grenoble/massi/oai/OAI-UERANSIM/OAI+UERANSIM/UERANSIM/build/OAI-gnb.yaml maitaba@access.grid5000.fr:nancy/massi/oai/OAI-gnb.yaml")
+os.system(f"scp {user}:{master}/massi/testoai/OAI-UERANSIM/OAI+UERANSIM/UERANSIM/build/OAI-gnb.yaml {user}:{workers1}/massi/testoai/OAI-UERANSIM/OAI+UERANSIM/OAI-gnb.yaml")
+os.system(f"scp {user}:{master}/massi/testoai/OAI-UERANSIM/OAI+UERANSIM/UERANSIM/build/OAI-gnb.yaml {user}:{workers2}/massi/testoai/OAI-UERANSIM/OAI+UERANSIM/OAI-gnb.yaml")
 data = data.replace("xxx", str(ip_adress))
 with open(r'UERANSIM/build/OAI-gnb.yaml', 'w') as file:
     file.write(data)
