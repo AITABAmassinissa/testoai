@@ -1,9 +1,11 @@
 ############################# open 9 terminal, 3 for each site #######################
 ssh maitaba@access.grid5000.fr
+
 ############################# reserve nodes in each site #############################
 screen -r reservation #.....(create screen -S reservation)
 oarsub -l nodes=1,walltime=2 -I
 ***ctrl a then d***
+
 ############################# access to each node in each site (exemple grenoble), do the same for nancy and rennes #############################
 screen -r g1 #.....(create screen -S g1)
 oarsub -C $(oarstat |grep aitaba)
@@ -13,8 +15,10 @@ screen -r g2 #.....(create screen -S g2)
 oarsub -l nodes=1,walltime=2 -I
 uniq $OAR_NODEFILE #.....to liste the names of the reserved nodes in the site
 oarsh NAME_OF_THE_SECOND_NODE
+
 ############################# install the tools in each node in each site #############################
 ./setup
+
 ############################# clean each node in each site  #############################
 sudo-g5k sysctl net.ipv4.conf.all.forwarding=1
 sudo-g5k iptables -P FORWARD ACCEPT
@@ -36,6 +40,7 @@ EOFF
 systemctl restart containerd
 exit
 EOF
+
 ############################# create the culster un the first node of grenoble  #############################
 sudo-g5k kubeadm init --pod-network-cidr=10.244.0.0/16
 
@@ -67,3 +72,15 @@ sudo-g5k  apt instagros-43.nancy.grid5000.frll g++
 yes | sudo-g5k  apt install libsctp-dev lksctp-tools
 sudo-g5k  apt install iproute2
 sudo-g5k  snap install cmake --classic
+
+############################# deploy setpodnet on the fisrt node of grenoble  #############################
+kubectl apply -f setpodnet-scheduler.yaml
+
+############################# deploy multus-cni on the fisrt node of grenoble #############################
+git clone https://github.com/k8snetworkplumbingwg/multus-cni.git
+cat ./deployments/multus-daemonset-thick.yml | kubectl apply -f -
+
+############################# deploy the oai core network in grenoble #############################
+kubectl create ns oai 
+helm dependency update grenoble/oai-5g-basic
+helm install basic grenoble/oai-5g-basic -n oai 
