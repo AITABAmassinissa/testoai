@@ -1,9 +1,9 @@
-############################# open 9 terminal, 3 for each site #######################
+############################# open 9 terminal, 3 for each site  grenoble nancy nantes #######################
 ssh maitaba@access.grid5000.fr
 
 ############################# reserve nodes in each site #############################
 screen -r reservation #.....(create screen -S reservation)
-oarsub -l nodes=1,walltime=2 -I
+oarsub -l nodes=2,walltime=6 -I
 ***ctrl a then d***
 
 ############################# access to each node in each site (exemple grenoble), do the same for nancy and rennes #############################
@@ -54,7 +54,6 @@ kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Doc
 
 ############################# join the cluster form the seconde node of grenoble and the 4 other nodes from the two other sites  #############################
 sudo-g5k kubeadm join ......
-
 ############################# install Helm on the fisrt node of grenoble  #############################
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
@@ -81,6 +80,7 @@ git clone https://github.com/k8snetworkplumbingwg/multus-cni.git
 cat ./deployments/multus-daemonset-thick.yml | kubectl apply -f -
 
 ############################# deploy the oai core network in grenoble #############################
+python3 label.py
 kubectl create ns oai 
 helm dependency update grenoble/oai-5g-basic
 helm install basic grenoble/oai-5g-basic -n oai 

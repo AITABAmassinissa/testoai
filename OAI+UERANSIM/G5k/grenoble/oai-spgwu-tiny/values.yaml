@@ -33,7 +33,7 @@ app_ad: "2" #Slice differentiator
 nb_pods: "8"
 
 nodeSelector:
-  key: grenoble
+  site: grenoble
   
 securityContext:
   privileged: true
