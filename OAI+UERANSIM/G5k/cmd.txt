@@ -1,4 +1,4 @@
-############################# open 9 terminal, 3 for each site  grenoble nancy nantes #######################
+############################# open 9 terminal, 3 for each site  lyon nancy nantes #######################
 ssh maitaba@access.grid5000.fr
 
 ############################# reserve nodes in each site #############################
@@ -54,6 +54,7 @@ kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Doc
 
 ############################# join the cluster form the seconde node of grenoble and the 4 other nodes from the two other sites  #############################
 sudo-g5k kubeadm join ......
+
 ############################# install Helm on the fisrt node of grenoble  #############################
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
