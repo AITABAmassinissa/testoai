@@ -59,6 +59,7 @@ sudo-g5k kubeadm join ......
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 chmod 700 get_helm.sh
 ./get_helm.sh
+helm plugin install https://github.com/ThalesGroup/helm-spray
 ############################# install UERANSIM on the fisrt node of each site  #############################
 sudo-g5k  rm -r UERANSIM/ #....remove the last UERANSIM folder
 
@@ -80,8 +81,20 @@ kubectl apply -f setpodnet-scheduler.yaml
 git clone https://github.com/k8snetworkplumbingwg/multus-cni.git
 cat ./deployments/multus-daemonset-thick.yml | kubectl apply -f -
 
+############################# pull images in every node in every site #############################
+docker pull docker.io/oaisoftwarealliance/oai-nrf:v1.5.0
+docker pull docker.io/oaisoftwarealliance/oai-udr 
+docker pull docker.io/oaisoftwarealliance/oai-udm
+docker pull docker.io/oaisoftwarealliance/oai-ausf
+docker pull docker.io/oaisoftwarealliance/oai-amf
+docker pull docker.io/oaisoftwarealliance/oai-spgwu-tiny
+docker pull docker.io/oaisoftwarealliance/oai-smf
+docker pull docker.io/oaisoftwarealliance/oai-smf
+docker pull docker.io/mysql:8.0
 ############################# deploy the oai core network in grenoble #############################
-python3 label.py
+python3 label.py  #.... ajouter les labels aux noeuds
 kubectl create ns oai 
-helm dependency update grenoble/oai-5g-basic
-helm install basic grenoble/oai-5g-basic -n oai 
+helm dependency update nantes/oai-5g-basic
+helm install basic nantes/oai-5g-basic -n oai 
+helm spray --namespace oai nantes/oai-5g-basic 
+
