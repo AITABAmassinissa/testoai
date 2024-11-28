@@ -81,7 +81,8 @@ kubectl apply -f setpodnet-scheduler.yaml
 git clone https://github.com/k8snetworkplumbingwg/multus-cni.git
 cat ./deployments/multus-daemonset-thick.yml | kubectl apply -f -
 
-############################# pull images in every node in every site #############################
+############################# pull images in every node in every site ############################
+sudo-g5k usermod -aG docker $USER && newgrp docker
 docker pull docker.io/oaisoftwarealliance/oai-nrf:v1.5.0
 docker pull docker.io/oaisoftwarealliance/oai-udr 
 docker pull docker.io/oaisoftwarealliance/oai-udm

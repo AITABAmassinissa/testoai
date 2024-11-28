@@ -114,4 +114,4 @@ spec:
       containers:
       - image: docker.io/maitaba/setpodnet:v1.0 #maitaba/setpodnet:latest 
         name: setpodnet-scheduler
-        imagePullPolicy: Always
+        #imagePullPolicy: Always
