@@ -140,8 +140,12 @@ securityContext:
 ##
 resources:
   requests:
-    memory: 128Mi
-    cpu: 100m
+    memory: 256Mi
+    cpu: 200m
+  limits:
+    memory: 256Mi
+    cpu: 200m
+
 
 # Custom mysql configuration files path
 configurationFilesPath: /etc/mysql/conf.d/
@@ -241,7 +245,7 @@ podLabels: {}
 initContainer:
   resources:
     requests:
-      memory: 10Mi
-      cpu: 10m
+      memory: 256Mi
+      cpu: 100m
 
 
