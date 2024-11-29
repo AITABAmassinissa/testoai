@@ -1,6 +1,6 @@
 ############################# open 9 terminal, 3 for each site  lyon nancy nantes #######################
 ssh maitaba@access.grid5000.fr
-
+git clone https://github.com/AITABAmassinissa/testoai.git
 ############################# reserve nodes in each site #############################
 screen -r reservation #.....(create screen -S reservation)
 oarsub -l nodes=2,walltime=6 -I
@@ -17,8 +17,8 @@ uniq $OAR_NODEFILE #.....to liste the names of the reserved nodes in the site
 oarsh NAME_OF_THE_SECOND_NODE
 
 ############################# install the tools in each node in each site #############################
-./setup
-
+chmod +x setup.sh
+./setup.sh
 ############################# clean each node in each site  #############################
 sudo sysctl net.ipv4.conf.all.forwarding=1
 sudo iptables -P FORWARD ACCEPT
