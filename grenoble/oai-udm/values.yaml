@@ -70,18 +70,18 @@ resources:
   define: true
   limits:
     tcpdump:
-      cpu: 300m
-      memory: 512Mi
+      cpu: 100m
+      memory: 128Mi
     nf:
-      cpu: 300m
-      memory: 512Mi
+      cpu: 100m
+      memory: 128Mi
   requests:
     tcpdump:
-      cpu: 300m
-      memory: 512Mi
+      cpu: 100m
+      memory: 128Mi
     nf:
-      cpu: 300m
-      memory: 512Mi
+      cpu: 100m
+      memory: 128Mi
 
 readinessProbe: true
 
