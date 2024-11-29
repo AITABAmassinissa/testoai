@@ -100,5 +100,7 @@ helm install basic lyon/oai-5g-basic -n oai
 helm install basic nancy/oai-5g-basic -n oai
 helm install basic nantes/oai-5g-basic -n oai
 
-helm spray --namespace oai nantes/oai-5g-basic 
+helm dependency update grenoble/oai-5g-basic
+
+helm spray --namespace oai grenoble/oai-5g-basic 
 
