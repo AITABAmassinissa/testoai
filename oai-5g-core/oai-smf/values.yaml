@@ -101,7 +101,7 @@ nodeSelector: {}
 schedulerName: setpodnet-scheduler
 id: "1" 
 app_ad: "2" #Slice differentiator
-nb_pods: "8"
+nb_pods: "10"
 
 #nodeSelector:
   #site: grenoble
