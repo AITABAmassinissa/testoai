@@ -20,19 +20,19 @@ oarsh NAME_OF_THE_SECOND_NODE
 chmod +x setup.sh
 ./setup.sh
 ############################# clean each node in each site  #############################
-sudo sysctl net.ipv4.conf.all.forwarding=1
-sudo iptables -P FORWARD ACCEPT
-sudo swapoff -a
-sudo ufw disable
-sudo ufw statut
-sudo ip link delete flannel.1 
-sudo ip link delete cni0 
-sudo rm $HOME/.kube/config
-sudo rm -r /etc/cni/net.d
+sudo-g5k sysctl net.ipv4.conf.all.forwarding=1
+sudo-g5k iptables -P FORWARD ACCEPT
+sudo-g5k swapoff -a
+sudo-g5k ufw disable
+sudo-g5k ufw statut
+sudo-g5k ip link delete flannel.1 
+sudo-g5k ip link delete cni0 
+sudo-g5k rm $HOME/.kube/config
+sudo-g5k rm -r /etc/cni/net.d
 
-yes | sudo kubeadm reset
+yes | sudo-g5k kubeadm reset
 
-sudo su <<EOF
+sudo-g5k su <<EOF
 cat > /etc/containerd/config.toml <<EOFF
 [plugins."io.containerd.grpc.v1.cri"]
   systemd_cgroup = true
@@ -41,19 +41,21 @@ systemctl restart containerd
 exit
 EOF
 
+
+
 ############################# create the culster un the first node of grenoble  #############################
-sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+sudo-g5k kubeadm init --pod-network-cidr=10.244.0.0/16
 
 THEN :
 
 mkdir -p $HOME/.kube
-sudo  cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo  chown $(id -u):$(id -g) $HOME/.kube/config
+sudo-g5k  cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo-g5k  chown $(id -u):$(id -g) $HOME/.kube/config
 
 kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
 
 ############################# join the cluster form the seconde node of grenoble and the 4 other nodes from the two other sites  #############################
-sudo kubeadm join ......
+sudo-g5k kubeadm join ......
 
 ############################# install Helm on the fisrt node of grenoble  #############################
 curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
@@ -61,18 +63,18 @@ chmod 700 get_helm.sh
 ./get_helm.sh
 helm plugin install https://github.com/ThalesGroup/helm-spray
 ############################# install UERANSIM on the fisrt node of each site  #############################
-sudo  rm -r UERANSIM/ #....remove the last UERANSIM folder
+sudo-g5k  rm -r UERANSIM/ #....remove the last UERANSIM folder
 
 git clone https://github.com/aligungr/UERANSIM
 
-sudo apt update
-sudo  apt install snapd
-sudo  apt install make
-sudo  apt install gcc
-sudo  apt instagros-43.nancy.grid5000.frll g++
-yes | sudo  apt install libsctp-dev lksctp-tools
-sudo  apt install iproute2
-sudo  snap install cmake --classic
+sudo-g5k apt update
+sudo-g5k  apt install snapd
+sudo-g5k  apt install make
+sudo-g5k  apt install gcc
+sudo-g5k  apt instagros-43.nancy.grid5000.frll g++
+yes | sudo-g5k  apt install libsctp-dev lksctp-tools
+sudo-g5k  apt install iproute2
+sudo-g5k  snap install cmake --classic
 
 ############################# deploy setpodnet on the fisrt node of grenoble  #############################
 kubectl apply -f setpodnet-scheduler.yaml
@@ -82,7 +84,7 @@ git clone https://github.com/k8snetworkplumbingwg/multus-cni.git
 cat ./deployments/multus-daemonset-thick.yml | kubectl apply -f -
 
 ############################# pull images in every node in every site ############################
-sudo usermod -aG docker $USER && newgrp docker
+sudo-g5k usermod -aG docker $USER && newgrp docker
 docker pull docker.io/oaisoftwarealliance/oai-nrf:v1.5.0
 docker pull docker.io/oaisoftwarealliance/oai-udr 
 docker pull docker.io/oaisoftwarealliance/oai-udm
