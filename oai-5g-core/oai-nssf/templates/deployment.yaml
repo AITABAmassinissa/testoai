@@ -129,7 +129,7 @@ spec:
         name: configuration
       dnsPolicy: ClusterFirst
       restartPolicy: Always
-      schedulerName: default-scheduler
+      schedulerName: "{{ .Values.schedulerName }}"
       serviceAccountName: {{ .Chart.Name }}
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- if .Values.nodeSelector}}
