@@ -14,7 +14,14 @@ spec:
   template:
     metadata:
       labels:
+        id: "{{ .Values.id }}" #"1" #1/2
+        app_ad: "{{ .Values.app_ad }}" #"5" #Slice differentiator
+        nb_pods: "{{ .Values.nb_pods }}" #"2" #number of pods in the slice
         {{- include "oai-upf.selectorLabels" . | nindent 8 }}
+      annotations:
+        communication-with: "oai-amf"
+        latency-oai-amf: "10"
+        bandwidth-oai-amf: "1"
     {{- if .Values.multus.n3Interface.create }}
       annotations:
         k8s.v1.cni.cncf.io/networks: >-
