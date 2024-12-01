@@ -1,9 +1,9 @@
 import os
 
-namespace='oai-tutorial'
+namespace='oai'
 ip_adress="10.244.0.2"
 nb_pods=10
-network="cni1"
+network="cni0"
 
 
 os.system("sudo ifconfig "+network+":"+str(1)+" "+str(ip_adress)+" up")

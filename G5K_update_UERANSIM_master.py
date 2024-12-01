@@ -1,6 +1,6 @@
 import os
 
-namespace='oai-tutorial'
+namespace='oai'
 ip_adress="10.244.0.1"
 nb_pods=10
 network="cni0"
