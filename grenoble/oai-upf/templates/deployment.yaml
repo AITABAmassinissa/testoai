@@ -19,9 +19,11 @@ spec:
         nb_pods: "{{ .Values.nb_pods }}" #"2" #number of pods in the slice
         {{- include "oai-upf.selectorLabels" . | nindent 8 }}
       annotations:
-        communication-with: "oai-amf"
+        communication-with: "oai-amf,oai-smf"
         latency-oai-amf: "10"
         bandwidth-oai-amf: "1"
+        latency-oai-smf: "10"
+        bandwidth-oai-smf: "1"
     {{- if .Values.multus.n3Interface.create }}
       annotations:
         k8s.v1.cni.cncf.io/networks: >-
