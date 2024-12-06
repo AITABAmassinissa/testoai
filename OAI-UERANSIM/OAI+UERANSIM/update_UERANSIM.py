@@ -29,5 +29,5 @@ if (retour.count('Running')==nb_pods):
         file.write(data)
         file.close()
     print("UERANSIM files configuration updated")
-else():
+else:
     print("UERANSIM files configuration not updated")
