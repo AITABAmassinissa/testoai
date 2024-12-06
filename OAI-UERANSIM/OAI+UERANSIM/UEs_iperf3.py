@@ -82,6 +82,7 @@ if (retour.count('Running')==nb_pods):
   while (i < number_of_UEs):
       if (slice["ok"][i]==1):  
           port=port+1
+          print('exec ./UERANSIM/build/nr-binder '+ str(slice["ip"][i]) + ' iperf3 -c '+ str(ip2)+ ' -p '+str(port)+' -i 1 -t '+str(1)+" 2>&1 | tee text_files/iperf3.txt")
           slice["iperf_processus"][i]=subprocess.Popen('exec ./UERANSIM/build/nr-binder '+ str(slice["ip"][i]) + ' iperf3 -c '+ str(ip2)+ ' -p '+str(port)+' -i 1 -t '+str(1)+" 2>&1 | tee text_files/iperf3.txt",shell = True, stdout = subprocess.PIPE, encoding = 'ascii')
           output = slice["iperf_processus"][i].communicate()[0]
           with open('text_files/iperf3.txt', 'r') as f:
