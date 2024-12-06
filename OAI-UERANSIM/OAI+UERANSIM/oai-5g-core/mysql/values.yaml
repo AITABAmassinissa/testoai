@@ -124,7 +124,7 @@ persistence:
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 # schedulerName:
-schedulerName: setpodnet-scheduler
+#schedulerName: setpodnet-scheduler
 id: "1" 
 app_ad: "2" #Slice differentiator
 nb_pods: "10"
