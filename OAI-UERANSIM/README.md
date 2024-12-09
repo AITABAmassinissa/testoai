@@ -237,15 +237,16 @@ git clone https://github.com/k8snetworkplumbingwg/multus-cni.git
     ```bash[language=bash]
     cat ./deployments/multus-daemonset-thick.yml | kubectl apply -f -
     ```
-  - Create a namespace where the helm-charts will be deployed, in this tutorial, we deploy them in oai namespace. To create oai namespace use the below command on your cluster: 
+4. Create a namespace where the helm-charts will be deployed, in this tutorial, we deploy them in oai namespace. To create oai namespace use the below command on your cluster: 
     ```bash[language=bash]
     kubectl create ns oai
     ```
-4. Clone the following repository:
+
+5. Clone the following repository:
 ```bash[language=bash]
 git clone https://github.com/AIDY-F2N/OAI-UERANSIM.git
 ```
-5. Open a terminal inside the folder "OAI-UERANSIM/OAI+UERANSIM", and run the following commands to deploy the OAI core:
+6. Open a terminal inside the folder "OAI-UERANSIM/OAI+UERANSIM", and run the following commands to deploy the OAI core:
 ```bash[language=bash]
 helm dependency update oai-5g-core/oai-5g-basic
 helm install basic oai-5g-core/oai-5g-basic/ -n oai
@@ -288,22 +289,22 @@ git clone https://github.com/k8snetworkplumbingwg/multus-cni.git
     ```bash[language=bash]
     cat ./deployments/multus-daemonset-thick.yml | kubectl apply -f -
     ```
-  - Create a namespace where the helm-charts will be deployed, in this tutorial, we deploy them in oai namespace. To create oai namespace use the below command on your cluster: 
+4. Create a namespace where the helm-charts will be deployed, in this tutorial, we deploy them in oai namespace. To create oai namespace use the below command on your cluster: 
     ```bash[language=bash]
     kubectl create ns oai
     ```
-4. Clone the following repository:
+5. Clone the following repository:
 ```bash[language=bash]
 git clone https://github.com/AIDY-F2N/OAI-UERANSIM.git
 ```
 
-5. Open a terminal inside the folder "OAI-UERANSIM/OAI+UERANSIM" and deploy setpodnet-scheduler using the following command:
+6. Open a terminal inside the folder "OAI-UERANSIM/OAI+UERANSIM" and deploy [setpodnet-scheduler](https://github.com/AIDY-F2N/setpodnet-scheduler) using the following command:
 
 ```bash[language=bash]
 kubectl apply -f setpodnet-scheduler.yaml
 ```
 
-6. Add latency and bandwidth constraints between pods: The User Plane Function (UPF) is a critical component in 5G networks, enabling low latency and high throughput. To optimize its deployment and ensure efficient communication with other core network functions, we need to specify constraints that reflect the UPF's requirements. For example, we have added constraints to the values file of the UPF pod (OAI-UERANSIM/OAI+UERANSIM/oai-5g-core-setpodnet/oai-upf/values.yaml) between UPF and SMF, and between UPF and AMF, using the following annotations:
+7. Add latency and bandwidth constraints between pods: The User Plane Function (UPF) is a critical component in 5G networks, enabling low latency and high throughput. To optimize its deployment and ensure efficient communication with other core network functions, we need to specify constraints that reflect the UPF's requirements. For example, we have added constraints to the values file of the UPF pod (OAI-UERANSIM/OAI+UERANSIM/oai-5g-core-setpodnet/oai-upf/values.yaml) between UPF and SMF, and between UPF and AMF, using the following annotations:
 
 ```yaml
 annotations:
@@ -319,7 +320,7 @@ You can add your own constraints based on your specific network requirements and
 
 
 
-7. Open a terminal inside the folder "OAI-UERANSIM/OAI+UERANSIM", and run the following commands to deploy the OAI core:
+8. Open a terminal inside the folder "OAI-UERANSIM/OAI+UERANSIM", and run the following commands to deploy the OAI core:
 ```bash[language=bash]
 helm dependency update oai-5g-core-setpodnet/oai-5g-basic
 helm install basic oai-5g-core-setpodnet/oai-5g-basic/ -n oai
