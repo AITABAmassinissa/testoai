@@ -18,6 +18,10 @@ spec:
         app_ad: "{{ .Values.app_ad }}" #"5" #Slice differentiator
         nb_pods: "{{ .Values.nb_pods }}" #"2" #number of pods in the slice
         {{- include "oai-amf.selectorLabels" . | nindent 8 }}
+      {{- if .Values.annotations }}
+      annotations:
+        {{- toYaml .Values.annotations | nindent 8 }}
+      {{- end }}
     {{- if .Values.multus.n2Interface.create }}
       annotations:
         k8s.v1.cni.cncf.io/networks: >-

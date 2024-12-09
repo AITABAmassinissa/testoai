@@ -28,6 +28,10 @@ spec:
         nb_pods: "{{ .Values.nb_pods }}" #"2" #number of pods in the slice
         app.kubernetes.io/name: {{ template "mysql.fullname" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- if .Values.annotations }}
+      annotations:
+        {{- toYaml .Values.annotations | nindent 8 }}
+      {{- end }}
 {{- with .Values.podLabels }}
 {{ toYaml . | indent 8 }}
 {{- end }}
