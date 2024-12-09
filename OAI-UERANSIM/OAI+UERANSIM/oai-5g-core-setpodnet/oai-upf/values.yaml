@@ -4,7 +4,7 @@ kubernetesDistribution: Vanilla  #Vanilla for community kubernetes distribution 
 ## To know more about them follow this tutorial https://gitlab.eurecom.fr/oai/cn5g/oai-cn5g-fed/-/tree/master/openshift
 nfimage:
   repository: docker.io/oaisoftwarealliance/oai-upf # dockerhub oaisoftwarealliance/oai-upf
-  version: develop           #image tag, develop tag for experimental features
+  version: v2.1.0           #image tag, develop tag for experimental features
   # pullPolicy: IfNotPresent or Never or Always
   pullPolicy: IfNotPresent
 
@@ -121,7 +121,13 @@ terminationGracePeriodSeconds: 5
 nodeSelector: {}
 schedulerName: setpodnet-scheduler
 id: "1" 
-app_ad: "2" #Slice differentiator
+app_ad: "2"
 nb_pods: "10"
+annotations:
+  communication-with: "oai-amf,oai-smf"
+  latency-oai-amf: "10"
+  bandwidth-oai-amf: "1"
+  latency-oai-smf: "10"
+  bandwidth-oai-smf: "1"
 
 nodeName:
