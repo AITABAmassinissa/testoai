@@ -33,6 +33,7 @@ The tutorial video is available on youtube: https://www.youtube.com/playlist?lis
 - [Pre-requisite](#pre-requisite)
 - [Build a K8S cluster](#build-a-k8s-cluster)
 - [OAI core script](#oai-core-script)
+- [OAI core script using setpodnet-scheduler](#oai-core-script-using-setpodnet-scheduler)
 - [UERANSIM](#ueransim)
 - [Setup Prometheus Monitoring](#setup-prometheus-monitoring)
 - [Setup Kube State Metrics on Kubernetes](#setup-kube-state-metrics-on-kubernetes)
@@ -214,7 +215,7 @@ To untaint the master node, you can use the kubectl taint command. Here's an exa
 # OAI core script
 
 
-Now, we present the different steps to install the OAI core script. 
+Now, we present the different steps to deploy the OAI core. 
 
 1.  Install the Helm CLI usnig this link: https://helm.sh/docs/intro/install/
 
@@ -227,8 +228,8 @@ Helm provides a straightforward way to define, install, and upgrade complex Kube
 helm plugin install https://github.com/ThalesGroup/helm-spray
 ```
 Helm Spray is a Helm plugin that simplifies the deployment of Kubernetes applications using Helm charts. Helm is a package manager for Kubernetes that allows you to define, install, and manage applications as reusable units called charts. Helm Spray extends Helm's functionality by providing additional features and capabilities for managing the lifecycle of complex deployments. The command helm plugin install installs the Helm Spray plugin, enabling you to use its functionalities alongside Helm.
-3. Configure Multiple Interfaces : Multus is used to provide multiple ethernet interfaces to network functions which have multiple communication interfaces. Multus CNI is a Container Network Interface (CNI) plugin for Kubernetes that enables attaching multiple network interfaces to pods. To install Multus using kubectl, follow the next steps given in https://github.com/k8snetworkplumbingwg/multus-cni: 
-4. Clone this GitHub repository
+
+3. Clone this GitHub repository
 ```bash[language=bash]
 git clone https://github.com/k8snetworkplumbingwg/multus-cni.git
 ```
@@ -240,11 +241,11 @@ git clone https://github.com/k8snetworkplumbingwg/multus-cni.git
     ```bash[language=bash]
     kubectl create ns oai
     ```
-5. Clone the following repository:
+4. Clone the following repository:
 ```bash[language=bash]
 git clone https://github.com/AIDY-F2N/OAI-UERANSIM.git
 ```
-6. Open a terminal inside the folder "OAI-UERANSIM/OAI+UERANSIM", and run the following commands to deploy the OAI core:
+5. Open a terminal inside the folder "OAI-UERANSIM/OAI+UERANSIM", and run the following commands to deploy the OAI core:
 ```bash[language=bash]
 helm dependency update oai-5g-core/oai-5g-basic
 helm install basic oai-5g-core/oai-5g-basic/ -n oai
@@ -259,7 +260,79 @@ kubectl get pods -n oai
     <img src="figures/3.png" alt="AIDY-F2N">
 </div>
 
+# OAI core script using setpodnet-scheduler
 
+Coscheduling refers to the ability to schedule a group of pods at once, as opposed to the default Kubernetes behavior that schedules pods one-by-one. [setpodnet-scheduler](https://github.com/AIDY-F2N/setpodnet-scheduler) is a custom Kubernetes scheduler designed to optimize the deployment of multi-pod applications by addressing the limitations of Kubernetes’ default scheduling approach. Unlike the default scheduler, which deploys pods independently, setpodnet-scheduler considers latency and bandwidth constraints between nodes and prioritizes co-locating connected pods on the node. This approach improves resource efficiency, reduces inter-pod latency, and enhances overall cluster performance and resource management. 
+
+Now, we present the different steps to deploy the OAI core using [setpodnet-scheduler](https://github.com/AIDY-F2N/setpodnet-scheduler). 
+
+
+
+1.  Install the Helm CLI usnig this link: https://helm.sh/docs/intro/install/
+
+Helm CLI (Command-Line Interface) is a command-line tool used for managing applications on Kubernetes clusters. It is part of the Helm package manager, which helps you package, deploy, and manage applications as reusable units called Helm charts.
+
+Helm provides a straightforward way to define, install, and upgrade complex Kubernetes applications. With Helm, you can define the desired state of your application using a declarative YAML-based configuration file called a Helm chart. A Helm chart contains all the necessary Kubernetes manifests, configurations, and dependencies required to deploy and run your application.
+
+2.  Install Helm Spray using this command: 
+```bash[language=bash]
+helm plugin install https://github.com/ThalesGroup/helm-spray
+```
+Helm Spray is a Helm plugin that simplifies the deployment of Kubernetes applications using Helm charts. Helm is a package manager for Kubernetes that allows you to define, install, and manage applications as reusable units called charts. Helm Spray extends Helm's functionality by providing additional features and capabilities for managing the lifecycle of complex deployments. The command helm plugin install installs the Helm Spray plugin, enabling you to use its functionalities alongside Helm.
+
+3. Clone this GitHub repository
+```bash[language=bash]
+git clone https://github.com/k8snetworkplumbingwg/multus-cni.git
+```
+  - Apply a daemonset which installs Multus using kubectl. From the root directory of the clone, apply the daemonset YAML file:
+    ```bash[language=bash]
+    cat ./deployments/multus-daemonset-thick.yml | kubectl apply -f -
+    ```
+  - Create a namespace where the helm-charts will be deployed, in this tutorial, we deploy them in oai namespace. To create oai namespace use the below command on your cluster: 
+    ```bash[language=bash]
+    kubectl create ns oai
+    ```
+4. Clone the following repository:
+```bash[language=bash]
+git clone https://github.com/AIDY-F2N/OAI-UERANSIM.git
+```
+
+5. Open a terminal inside the folder "OAI-UERANSIM/OAI+UERANSIM" and deploy setpodnet-scheduler using the following command:
+
+```bash[language=bash]
+kubectl apply -f setpodnet-scheduler.yaml
+```
+
+6. Add latency and bandwidth constraints between pods: The User Plane Function (UPF) is a critical component in 5G networks, enabling low latency and high throughput. To optimize its deployment and ensure efficient communication with other core network functions, we need to specify constraints that reflect the UPF's requirements. For example, we have added constraints to the values file of the UPF pod (OAI-UERANSIM/OAI+UERANSIM/oai-5g-core-setpodnet/oai-upf/values.yaml) between UPF and SMF, and between UPF and AMF, using the following annotations:
+
+```yaml
+annotations:
+  communication-with: "oai-amf,oai-smf"
+  latency-oai-amf: "10"
+  bandwidth-oai-amf: "1"
+  latency-oai-smf: "10"
+  bandwidth-oai-smf: "1"
+```
+These constraints are crucial for optimizing the deployment of OAI core network components using setpodnet-scheduler. By specifying communication relationships, latency requirements, and bandwidth allocations between UPF, AMF, and SMF, we enable the scheduler to make informed decisions about pod placement. This approach ensures optimal network conditions, maintains responsiveness, and helps prevent bandwidth exhaustion, which is particularly important for the UPF's role in data processing and forwarding.
+
+You can add your own constraints based on your specific network requirements and topology. The setpodnet-scheduler is flexible and can accommodate custom constraints for different components of the 5G core network. You can modify the values files for other network functions (e.g., AMF, SMF) to add similar annotations, adjusting the latency and bandwidth values as needed for their particular use case or network design. For more information on using setpodnet-scheduler, visit https://github.com/AIDY-F2N/setpodnet-scheduler.
+
+
+
+7. Open a terminal inside the folder "OAI-UERANSIM/OAI+UERANSIM", and run the following commands to deploy the OAI core:
+```bash[language=bash]
+helm dependency update oai-5g-core-setpodnet/oai-5g-basic
+helm install basic oai-5g-core-setpodnet/oai-5g-basic/ -n oai
+```
+The two commands you provided are related to the Helm package manager and are used to manage and deploy Helm charts onto a Kubernetes cluster. 
+After this, run this command to check if the core is deployed: 
+```bash[language=bash]
+kubectl get pods -n oai 
+```
+
+<div align="center">
+    <img src="figures/3.png" alt="AIDY-F2N">
+</div>
 
 # UERANSIM
 
